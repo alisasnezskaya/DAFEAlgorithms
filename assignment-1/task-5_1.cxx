@@ -28,9 +28,38 @@
 ****************************************************************************/
 
 #include <iostream>
+#include <algorithm>
+#include <string>
+#include <vector>
 
-int main()
-{
-    return 0;
+char complement(char ch) {
+	switch (ch) {
+		case '(': return ')';
+		case '[': return ']';
+		case '{': return '}';
+		case ')': return '(';
+		case ']': return '[';
+		case '}': return '{';
+	}
 }
 
+int main() {
+	std::string s; std::cin >> s;
+	std::string z = s;
+	std::vector<char> q;
+	for (int i = 0; i < s.size(); ++i) {
+		char ch = s[i];
+		if (ch == '(' || ch == '[' || ch == '{') q.push_back(ch);
+		else if (q.size()) {
+			if (q.back() == complement(ch)) {
+				q.pop_back();
+			} else {
+				std::cout << "IMPOSSIBLE", exit(0);
+			}
+		}
+		else z.insert(0, 1, complement(ch));
+	}
+	std::transform(q.rbegin(), q.rend(), std::back_inserter(z), complement);
+
+	std::cout << z;
+}
