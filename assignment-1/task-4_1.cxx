@@ -47,7 +47,6 @@ pop вызвана для пустой структуры данных, то о�
 
 #include <iostream>
 #include <memory>
-#include <exception>
 
 #if __cplusplus >= 201703
 #include <optional>
@@ -64,10 +63,8 @@ namespace std { // yes i'm aware it's UB
     optional(U&& value) : value(std::forward<U>(value)), has_value(true) {}
     optional(nullopt_t) : has_value(false) {};
 
-    T operator*() {
-      if (!has_value) throw std::logic_error("empty optional");
-      return value;
-    }
+    T operator*() { return value; }
+    operator bool() const noexcept { return has_value; }
   };
 };
 #endif
@@ -125,12 +122,8 @@ int main() {
     std::cin >> cmd >> operand; if (!cmd) throw std::invalid_argument("invalid input");
     switch (cmd) {
       case pop_front: {
-        int value;
-        try {
-          value = *queue.pop();
-        } catch (std::exception& e) {
-          value = -1;
-        }
+        std::optional<int> maybe_value = queue.pop();
+        int value = (maybe_value ? *maybe_value : -1);
         ok = ok && value == operand;
         break;
       }
