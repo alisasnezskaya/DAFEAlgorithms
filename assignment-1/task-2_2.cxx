@@ -19,9 +19,18 @@ n < 1000, координаты < 10000.
 ****************************************************************************/
 
 #include <iostream>
+#include <vector>
+#include <cmath>
 
-int main()
-{
-    return 0;
+int main() {
+	int n; std::cin >> n;
+	std::vector<int> x(n), y(n);
+	for (int i = 0; i < n; ++i) {
+		std::cin >> x[i] >> y[i];
+	}
+	int twice_area = 0;
+	for (int i = 2; i < n; ++i) {
+		twice_area += ((x[i] - x[0]) * (y[i-1] - y[0]) - (x[i-1] - x[0]) * (y[i] - y[0]));
+	}
+	std::cout << (double)std::abs(twice_area) / 2;
 }
-
