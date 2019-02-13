@@ -14,9 +14,21 @@
 ****************************************************************************/
 
 #include <iostream>
+#include <vector>
 
-int main()
-{
-    return 0;
+int main() {
+	int n; std::cin >> n;
+	std::vector<int> a(n);
+	for (auto& x : a) std::cin >> x;
+
+	if (n == 1) std::cout << 0, exit(0);
+
+	int l = 0, r = n;
+
+	while (l < r) {
+		int p = (l + r) / 2;
+		if ((p == n-1 || a[p] > a[p+1]) && (p == 0 || a[p] > a[p-1])) std::cout << p, exit(0);
+		if (a[p-1] < a[p+1]) l = p;
+		else r = p;
+	}
 }
-
