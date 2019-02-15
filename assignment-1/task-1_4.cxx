@@ -28,7 +28,7 @@ int main() {
 		multiplier = 2;
 		goto finish;
 	}
-	for (int i = 3; i <= std::sqrt(N); ++i) {
+	for (int i = 3; i <= std::sqrt(N); i += 2) {
 		if (N % i == 0) {
 			multiplier = i;
 			goto finish;
