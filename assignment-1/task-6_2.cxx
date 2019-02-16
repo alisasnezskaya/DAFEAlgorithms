@@ -39,9 +39,65 @@
 ****************************************************************************/
 
 #include <iostream>
+#include <vector>
+#include <algorithm>
 
-int main()
-{
-    return 0;
+template<class T, class Cmp = std::less_equal<T>>
+struct Heap {
+	std::vector<T> store;
+	size_t last_elem = -1;
+	Cmp cmp{};
+
+	Heap() : store(1) {}
+
+	size_t size() const noexcept { return last_elem + 1; }
+
+	template<class U>
+	void insert(U&& value) {
+		if (size() == store.size()) store.resize(store.size() * 2);
+		store[++last_elem] = std::forward<U>(value);
+
+		int idx = last_elem;
+		int parent = (idx - 1) / 2;
+		while (cmp(store[idx], store[parent]) && idx) {
+			std::swap(store[idx], store[parent]);
+			idx = std::exchange(parent, (idx - 1) / 2);
+		}
+	}
+
+	T pop() {
+		if (last_elem == 0) return store[last_elem--];
+		T result = std::exchange(store[0], store[last_elem--]);
+
+		int idx = 0;
+		int left_c, right_c;
+		while (left_c = idx * 2 + 1, right_c = idx * 2 + 2, left_c <= last_elem) {
+			int idx_of_interest = (right_c > last_elem || cmp(store[left_c], store[right_c]) ? left_c : right_c);
+			if (!cmp(store[idx], store[idx_of_interest])) {
+				std::swap(store[idx], store[idx_of_interest]);
+				idx = idx_of_interest;
+			} else break;
+		}
+		return result;
+	}
+};
+
+int main() {
+	int n; std::cin >> n;
+	Heap<int> heap;
+	for (int i = 0; i < n; ++i) {
+		int tmp; std::cin >> tmp;
+		heap.insert(tmp);
+	}
+
+	// so essentially at each step we replace the two least
+	// numbers with their sum while mantaining the invariant
+	int result = 0;
+	while (heap.size() > 1) {
+		int a = heap.pop(), b = heap.pop();
+		result += a + b;
+		heap.insert(a + b);
+	}
+
+	std::cout << result;
 }
-
