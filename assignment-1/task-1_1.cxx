@@ -11,8 +11,11 @@ n <= 1000.
 
 #include <iostream>
 
-int main()
-{
-    return 0;
+int main() {
+	int n; std::cin >> n;
+	int result = 0;
+	for (int divisor = 5; divisor <= n; divisor *= 5) {
+		result += n / divisor;
+	}
+	std::cout << result;
 }
-
