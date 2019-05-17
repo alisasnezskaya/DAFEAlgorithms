@@ -29,9 +29,45 @@ N ≤ 200.
 
 ****************************************************************************/
 
-#include <iostream>
+#include <iostream> 
 
-int main()
-{
-    return 0;
+using namespace std; 
+
+long long p(int n, int k, long long **b) 
+{ 
+    if( b[n][k] == 0 ) 
+    { 
+        if(n >= k && k > 0) 
+            b[n][k] += (p(n, k-1, b)+p(n-k, k, b)); 
+        else if( k > n ) 
+            b[n][k] += p(n, n, b); 
+        else if(n == 0 && k == 0) 
+            b[n][k]++; 
+        else if(n != 0 && k == 0) 
+            b[n][k] = b[n][k]; 
+        return b[n][k]; 
+    } 
+    else 
+    { 
+        return b[n][k]; 
+    } 
+} 
+
+int main() 
+{ 
+    int n; 
+    cin >> n; 
+    long long **b = new long long*[n+1]; 
+    for( int i = 0; i < n + 1; i++ ) 
+    { 
+        b[i] = new long long[n + 1]; 
+        fill ( b[i] + 0, b[i] + n + 1, 0 ); 
+    } 
+    
+    long long k = p( n, n, b ); 
+    if(n == 0) 
+        cout << 0; 
+    else 
+        cout << k; 
+    return 0; 
 }
