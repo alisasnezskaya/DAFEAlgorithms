@@ -43,10 +43,40 @@
 ****************************************************************************/
 
 
-#include <iostream>
+#include <iostream> 
+#include <algorithm> 
+#include <vector> 
 
-int main()
-{
-    return 0;
+using namespace std; 
+
+bool comp( pair<int, int> a, pair<int, int> b ) 
+{ 
+    return a.first < b.first; 
+} 
+
+int main() 
+{ 
+    int a, b; 
+    vector < pair<int,int> > athlete; 
+    while( !cin.eof() ) 
+    { 
+        cin >> a >> b; 
+        pair<int, int> k (a, b); 
+        athlete.push_back(k); 
+    } 
+    
+    sort( athlete.begin(), athlete.end(), comp ); 
+    int count = 1; 
+    int max = athlete[0].first; 
+    for( int i = 1; i < athlete.size(); i++ ) 
+    { 
+        if( athlete[i].second >= max ) 
+        { 
+            max += athlete[i].first; 
+            count++; 
+        } 
+    } 
+    cout << count; 
+    return 0; 
 }
 
